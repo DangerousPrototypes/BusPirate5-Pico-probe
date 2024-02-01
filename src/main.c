@@ -81,7 +81,7 @@ void usb_thread(void *ptr)
 
 int main(void) {
 
-    board_init();
+    //board_init();
     usb_serial_init();
     cdc_uart_init();
     tusb_init();

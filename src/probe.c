@@ -31,8 +31,16 @@
 #include <hardware/gpio.h>
 
 #include "led.h"
+
 #include "picoprobe_config.h"
+#if defined(PROBE_IO_RAW) || defined(PROBE_IO_SWDI)
 #include "probe.pio.h"
+#endif
+
+#if defined(PROBE_IO_OEN)
+#include "probe_oen.pio.h"
+#endif
+
 #include "tusb.h"
 
 #define DIV_ROUND_UP(m, n)	(((m) + (n) - 1) / (n))

@@ -50,6 +50,14 @@ static uint rx_led_debounce;
 #endif
 
 void cdc_uart_init(void) {
+    //configure buffer directions
+    gpio_set_function(PICOPROBE_UART_TX-8, GPIO_FUNC_SIO);
+    gpio_set_function(PICOPROBE_UART_RX-8, GPIO_FUNC_SIO);
+    gpio_set_dir(PICOPROBE_UART_TX-8, true);
+    gpio_put(PICOPROBE_UART_TX-8,true);
+    gpio_set_dir(PICOPROBE_UART_RX-8, true);
+    gpio_put(PICOPROBE_UART_RX-8,false);    
+
     gpio_set_function(PICOPROBE_UART_TX, GPIO_FUNC_UART);
     gpio_set_function(PICOPROBE_UART_RX, GPIO_FUNC_UART);
     gpio_set_pulls(PICOPROBE_UART_TX, 1, 0);

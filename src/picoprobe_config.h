@@ -66,11 +66,11 @@ do { \
 // TODO tie this up with PICO_BOARD defines in the main SDK
 
 #ifndef DEBUGPROBE 
-#include "board_pico_config.h"
+//#include "board_pico_config.h"
 #else
 #include "board_debugprobe_config.h"
 #endif
-//#include "board_example_config.h"
+#include "board_buspirate5_config.h"
 
 
 #define PROTO_DAP_V1 1
