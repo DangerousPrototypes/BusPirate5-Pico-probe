@@ -26,6 +26,7 @@ const char *func_pin_label_ordered[] = {
 };
 
 const char *direction_pin_label_ordered[]={
+    "",
     "->",
     "",
     "",
@@ -36,3 +37,9 @@ const char *direction_pin_label_ordered[]={
     "<->",
     "",
 };
+
+static inline void pirate_options_init(void){
+    #include "pirate/psu.h"
+    psu_init();
+    //if(psu_enable(3.3, 0, true)) while(true);
+}

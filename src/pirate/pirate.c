@@ -59,4 +59,6 @@ void pirate_init(void){
     lcd_backlight_enable(true);
 
     ui_lcd_update(hw_pin_label_ordered, func_pin_label_ordered, direction_pin_label_ordered);
+
+    pirate_options_init();
 }

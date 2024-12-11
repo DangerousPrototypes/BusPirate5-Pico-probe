@@ -23,6 +23,7 @@ add_executable(picoprobe
         src/pirate/pullup.c
         src/pirate/shift.c
         src/pirate/lcd.c
+        src/pirate/psu.c
         src/pirate/display/display.c
 )
 
@@ -76,9 +77,11 @@ target_link_libraries(picoprobe PRIVATE
         FreeRTOS-Kernel-Heap1
         hardware_adc
         hardware_spi
+        hardware_pwm
+        hardware_clocks
 )
 
-pico_set_binary_type(picoprobe copy_to_ram)
+#pico_set_binary_type(picoprobe copy_to_ram) 
 
 pico_add_extra_outputs(picoprobe)
 
