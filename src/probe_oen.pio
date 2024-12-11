@@ -6,27 +6,26 @@
 
 ; SWDIO_OEn is pin 0, SWCLK pin 1, SWDIO (out) pin 2, SWDI (in) pin 3.
 ; Pin 0 and 1 are sideset pins
- 
+
 .program probe
-.side_set 2 opt 
-; 2 side set bits, optional in each instruction ()
+.side_set 2 opt
 
 public turnaround_cmd:
     pull
-turnaround_bitloop:                            ; prepare for read, the turnaround command and a dummy cycle
-    nop                         [1]  side 0x1 ; 0b01 clk=0, en=1 en=1=input
-    jmp x-- turnaround_bitloop  [1]  side 0x3 ; 0b11 clk=1, en=1 en=1=input
+turnaround_bitloop:
+    nop                         [1]  side 0x1
+    jmp x-- turnaround_bitloop  [1]  side 0x3
     jmp get_next_cmd
 
 public write_cmd:
     pull
 write_bitloop:
-    out pins, 1                 [1]  side 0x0   ; Data is output by host on negedge 0b00 clk=0, en=0=output
-    jmp x-- write_bitloop       [1]  side 0x2   ; ...and captured by target on posedge 0b10 clk=1, en=0=output
+    out pins, 1                 [1]  side 0x0   ; Data is output by host on negedge
+    jmp x-- write_bitloop       [1]  side 0x2   ; ...and captured by target on posedge
                                                 ; Fall through to next command
 .wrap_target
 public get_next_cmd:
-    pull                             side 0x1   ; SWCLK initially low, OEn disabled 0b01 clk=0, en=1
+    pull                             side 0x1   ; SWCLK initially low, OEn disabled
     out x, 8                                    ; Get bit count
     out pindirs, 1                              ; Set SWDIO direction
     out pc, 5                                   ; Go to command routine
@@ -34,8 +33,8 @@ public get_next_cmd:
 read_bitloop:
     nop                                         ; Additional delay on taken loop branch
 public read_cmd:
-    in pins, 1                  [1]  side 0x3   ; Data is captured by host on posedge 0b11 en=1 en=1=input
-    jmp x-- read_bitloop             side 0x1   ; 0b01 en=1 en=1=input
+    in pins, 1                  [1]  side 0x3   ; Data is captured by host on posedge
+    jmp x-- read_bitloop             side 0x1
     push
 .wrap                                           ; Wrap to next command
 
