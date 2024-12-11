@@ -26,7 +26,7 @@
 #ifndef BOARD_EXAMPLE_H_
 #define BOARD_EXAMPLE_H_
 
-
+#define BOARD_BUSPIRATE
 /* Select one of these. */
 /* Direct connection - SWCLK/SWDIO on two GPIOs */
 //#define PROBE_IO_RAW
@@ -66,7 +66,7 @@
 #if defined(PROBE_CDC_UART)
 #define PICOPROBE_UART_TX 12
 #define PICOPROBE_UART_RX 13
-#define PICOPROBE_UART_INTERFACE uart1
+#define PICOPROBE_UART_INTERFACE uart0
 #define PICOPROBE_UART_BAUDRATE 115200
 /* Flow control - some or all of these can be omitted if not used */
 //#define PICOPROBE_UART_RTS 9
@@ -81,5 +81,10 @@
 #define PICOPROBE_UART_TX_LED 8
 */
 #define PROBE_PRODUCT_STRING "Debug Probe (CMSIS-DAP)"
+
+static inline void board_init(void) {
+    /* Set up any board-specific GPIOs here */
+    return;
+}
 
 #endif
