@@ -16,7 +16,7 @@ void pirate_init(void){
     bio_init();
 
     // setup SPI0 for on board peripherals
-    uint baud = spi_init(BP_SPI_PORT, BP_SPI_HIGH_SPEED);
+    spi_init(BP_SPI_PORT, BP_SPI_HIGH_SPEED);
     gpio_set_function(BP_SPI_CDI, GPIO_FUNC_SPI);
     gpio_set_function(BP_SPI_CLK, GPIO_FUNC_SPI);
     gpio_set_function(BP_SPI_CDO, GPIO_FUNC_SPI);

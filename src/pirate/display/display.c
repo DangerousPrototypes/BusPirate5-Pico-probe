@@ -5,9 +5,9 @@
 #include "hardware/spi.h"
 #include "font/font.h" 
 #include "font/hunter-23pt-24h24w.h"
-#include "font/hunter-20pt-21h21w.h"
+//#include "font/hunter-20pt-21h21w.h"
 #include "font/hunter-14pt-19h15w.h"
-#include "font/hunter-12pt-16h13w.h" 
+//#include "font/hunter-12pt-16h13w.h" 
 #include "background.h"
 #include "background_image_v4.h"
 #include "display.h"
@@ -98,7 +98,7 @@ void lcd_write_string(
     const FONT_INFO* font, const uint8_t* back_color, const uint8_t* text_color, const char* c, uint16_t fill_length) {
     uint16_t row;
     uint16_t length = 0;
-    uint8_t adjusted_c;
+    uint8_t adjusted_c=0;
 
     while (*c > 0) {
         adjusted_c = (*c) - (*font).start_char;
@@ -156,40 +156,10 @@ uint16_t lcd_get_col(const struct display_layout* layout, const FONT_INFO* font,
     return col_start;
 }
 
-void lcd_paint_background(void) {
-    uint16_t top_margin;
-
-    // Current measurement
-    uint8_t current_string[] = "000.0";
-    lcd_write_labels(layout.current_left_pad,
-                     layout.current_top_pad,
-                     layout.font_big,
-                     colors_pallet[layout.current_color],
-                     current_string,
-                     0);
-
-    uint8_t ma_string[] = "MA";
-    lcd_write_labels(
-        layout.ma_left_pad, layout.ma_top_pad, layout.font_default, colors_pallet[layout.ma_color], ma_string, 0);
-
-    uint8_t value_string[] = "0.0V";
-    uint16_t left_margin = lcd_get_col(&layout, layout.font_default, 3); // put us in the third column
-    // Vout voltage
-    lcd_write_labels(
-        left_margin, layout.vout_top_pad, layout.font_default, colors_pallet[layout.io_value_color], value_string, 0);
-    // IO voltage
-    top_margin = layout.io_col_top_pad; // first line of IO pins
-    for (int i = 1; i < HW_PINS - 1; i++) {
-        lcd_write_labels(
-            left_margin, top_margin, layout.font_default, colors_pallet[layout.io_value_color], value_string, 0);
-        top_margin += layout.io_row_height;
-    }
-}
-
 //modified to draw once with pin labels and then move onto the main firmware
 void ui_lcd_update(const char **hw_pin_label_ordered, const char **func_pin_label_ordered, const char **direction_pin_label_ordered) {
-        lcd_write_background(layout.image->bitmap);
-        //lcd_paint_background();
+
+    lcd_write_background(layout.image->bitmap);
 
 // names
     uint16_t left_margin = lcd_get_col(&layout, layout.font_default, 1); // put us in the first column
@@ -234,7 +204,7 @@ void ui_lcd_update(const char **hw_pin_label_ordered, const char **func_pin_labe
             left_margin, top_margin, layout.font_default, colors_pallet[layout.io_label_color], direction_pin_label_ordered[i], 0);
         top_margin += layout.io_row_height;
     }
-
+    
 }
 
 void lcd_write_labels(uint16_t left_margin,

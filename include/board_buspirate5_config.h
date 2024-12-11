@@ -26,12 +26,9 @@
 #ifndef BOARD_EXAMPLE_H_
 #define BOARD_EXAMPLE_H_
 
+#include "pirate/pirate.h"
+
 #define BOARD_BUSPIRATE
-/* Select one of these. */
-/* Direct connection - SWCLK/SWDIO on two GPIOs */
-//#define PROBE_IO_RAW
-/* SWCLK connected to a GPIO, SWDO driven from a GPIO, SWDI sampled via a level shifter */
-//#define PROBE_IO_SWDI
 /* Level-shifted SWCLK, SWDIO with separate SWDO, SWDI and OE_N pin */
 #define PROBE_IO_OEN
 
@@ -41,26 +38,12 @@
 //#define PROBE_PIN_RESET 1
 
 #define PROBE_SM 0 
-#define PROBE_PIN_OFFSET 12
-/* PIO config for PROBE_IO_RAW */
-#if defined(PROBE_IO_RAW)
-#define PROBE_PIN_SWCLK (PROBE_PIN_OFFSET + 0)
-#define PROBE_PIN_SWDIO (PROBE_PIN_OFFSET + 1)
-#endif
-
-/* PIO config for PROBE_IO_SWDI */
-#if defined(PROBE_IO_SWDI)
-#define PROBE_PIN_SWCLK (PROBE_PIN_OFFSET + 0)
-#define PROBE_PIN_SWDIO (PROBE_PIN_OFFSET + 1)
-#define PROBE_PIN_SWDI  (PROBE_PIN_OFFSET + 2)
-#endif
 
 /* PIO config for PROBE_IO_OEN - note that SWDIOEN and SWCLK are both side_set signals, so must be consecutive. */
 #if defined(PROBE_IO_OEN)
 #define PROBE_PIN_SWDIOEN (7)
 #define PROBE_PIN_SWCLK (8)
 #define PROBE_PIN_SWDIO (15)
-//#define PROBE_PIN_SWDI (PROBE_PIN_OFFSET + 3)
 #endif
 
 #if defined(PROBE_CDC_UART)

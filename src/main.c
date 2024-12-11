@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "bsp/board.h"
+//#include "bsp/board.h"
 #include "tusb.h"
 
 #include "picoprobe_config.h"

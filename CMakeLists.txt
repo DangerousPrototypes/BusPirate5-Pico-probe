@@ -18,6 +18,12 @@ add_executable(picoprobe
         src/get_serial.c
         src/sw_dp_pio.c
         src/tusb_edpt_handler.c
+        src/pirate/pirate.c
+        src/pirate/bio.c
+        src/pirate/pullup.c
+        src/pirate/shift.c
+        src/pirate/lcd.c
+        src/pirate/display/display.c
 )
 
 target_sources(picoprobe PRIVATE
@@ -26,12 +32,15 @@ target_sources(picoprobe PRIVATE
         CMSIS_5/CMSIS/DAP/Firmware/Source/DAP_vendor.c
         CMSIS_5/CMSIS/DAP/Firmware/Source/SWO.c
         #CMSIS_5/CMSIS/DAP/Firmware/Source/SW_DP.c
-        )
+        ) 
 
 target_include_directories(picoprobe PRIVATE
         CMSIS_5/CMSIS/DAP/Firmware/Include/
         CMSIS_5/CMSIS/Core/Include/
         include/
+        ${CMAKE_CURRENT_SOURCE_DIR}pirate/
+        ${CMAKE_CURRENT_SOURCE_DIR}pirate/display/
+        ${CMAKE_CURRENT_SOURCE_DIR}pirate/display/fonts/
         )
 
 target_compile_options(picoprobe PRIVATE -Wall)
@@ -65,8 +74,12 @@ target_link_libraries(picoprobe PRIVATE
         hardware_pio
         FreeRTOS-Kernel
         FreeRTOS-Kernel-Heap1
+        hardware_adc
+        hardware_spi
 )
 
 pico_set_binary_type(picoprobe copy_to_ram)
 
 pico_add_extra_outputs(picoprobe)
+
+string(APPEND CMAKE_EXE_LINKER_FLAGS "-Wl,--print-memory-usage")
