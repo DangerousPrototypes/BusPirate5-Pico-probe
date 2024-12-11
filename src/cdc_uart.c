@@ -50,13 +50,20 @@ static uint rx_led_debounce;
 #endif
 
 void cdc_uart_init(void) {
+  
+  #ifdef BOARD_BUSPIRATE
+    #include "pirate/pirate.h"
+    #include "pirate/bio.h"
     //configure buffer directions
-    gpio_set_function(PICOPROBE_UART_TX-8, GPIO_FUNC_SIO);
-    gpio_set_function(PICOPROBE_UART_RX-8, GPIO_FUNC_SIO);
-    gpio_set_dir(PICOPROBE_UART_TX-8, true);
-    gpio_put(PICOPROBE_UART_TX-8,true);
-    gpio_set_dir(PICOPROBE_UART_RX-8, true);
-    gpio_put(PICOPROBE_UART_RX-8,false);    
+    //gpio_set_function(PICOPROBE_UART_TX-8, GPIO_FUNC_SIO);//done in init
+    //gpio_set_function(PICOPROBE_UART_RX-8, GPIO_FUNC_SIO);
+    //gpio_set_dir(PICOPROBE_UART_TX-8, true);//done in init
+    //gpio_put(PICOPROBE_UART_TX-8,true);
+    bio_set_buffer_dir(PICOPROBE_UART_TX, true);
+    //gpio_set_dir(PICOPROBE_UART_RX-8, true);//done in init
+    //gpio_put(PICOPROBE_UART_RX-8,false); 
+    bio_set_buffer_dir(PICOPROBE_UART_RX, false);   
+  #endif
 
     gpio_set_function(PICOPROBE_UART_TX, GPIO_FUNC_UART);
     gpio_set_function(PICOPROBE_UART_RX, GPIO_FUNC_UART);
