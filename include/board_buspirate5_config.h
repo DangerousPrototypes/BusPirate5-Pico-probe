@@ -44,13 +44,14 @@
 #define PROBE_PIN_SWDIOEN (7)
 #define PROBE_PIN_SWCLK (8)
 #define PROBE_PIN_SWDIO (15)
+#define PROBE_PIN_OFFSET PROBE_PIN_SWCLK
 #endif
 
 #if defined(PROBE_CDC_UART)
-#define PICOPROBE_UART_TX 12
-#define PICOPROBE_UART_RX 13
-#define PICOPROBE_UART_INTERFACE uart0
-#define PICOPROBE_UART_BAUDRATE 115200
+#define PROBE_UART_TX 12
+#define PROBE_UART_RX 13
+#define PROBE_UART_INTERFACE uart0
+#define PROBE_UART_BAUDRATE 115200
 /* Flow control - some or all of these can be omitted if not used */
 //#define PICOPROBE_UART_RTS 9
 //#define PICOPROBE_UART_DTR 10
@@ -65,9 +66,8 @@
 */
 #define PROBE_PRODUCT_STRING "Debug Probe (CMSIS-DAP)"
 
-static inline void board_init(void) {
+inline void board_init(void) {
     /* Set up any board-specific GPIOs here */
-    return;
 }
 
 #endif

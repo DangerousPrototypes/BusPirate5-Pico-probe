@@ -37,6 +37,10 @@
 
 /* Include CDC interface to bridge to target UART. Omit if not used. */
 #define PROBE_CDC_UART
+
+/* Board implements hardware flow control for UART RTS/CTS instead of ACM control */
+#define PROBE_UART_HWFC
+
 /* Target reset GPIO (active-low). Omit if not used.*/
 #define PROBE_PIN_RESET 1
 
@@ -56,7 +60,7 @@
 #endif
 
 /* PIO config for PROBE_IO_OEN - note that SWDIOEN and SWCLK are both side_set signals, so must be consecutive. */
-#if defined(PROBE_IO_SWDIOEN)
+#if defined(PROBE_IO_OEN)
 #define PROBE_PIN_SWDIOEN (PROBE_PIN_OFFSET + 0)
 #define PROBE_PIN_SWCLK (PROBE_PIN_OFFSET + 1)
 #define PROBE_PIN_SWDIO (PROBE_PIN_OFFSET + 2)
@@ -64,21 +68,29 @@
 #endif
 
 #if defined(PROBE_CDC_UART)
-#define PICOPROBE_UART_TX 4
-#define PICOPROBE_UART_RX 5
-#define PICOPROBE_UART_INTERFACE uart1
-#define PICOPROBE_UART_BAUDRATE 115200
-/* Flow control - some or all of these can be omitted if not used */
-#define PICOPROBE_UART_RTS 9
-#define PICOPROBE_UART_DTR 10
+#define PROBE_UART_TX 4
+#define PROBE_UART_RX 5
+#define PROBE_UART_INTERFACE uart1
+#define PROBE_UART_BAUDRATE 115200
+
+#if defined(PROBE_UART_HWFC)
+/* Hardware flow control - see 1.4.3 in the RP2040 datasheet for valid pin settings */
+#define PROBE_UART_CTS 6
+#define PROBE_UART_RTS 7
+#else
+/* Software flow control - RTS and DTR can be omitted if not used */
+#define PROBE_UART_RTS 9
+#endif
+#define PROBE_UART_DTR 10
+
 #endif
 
 /* LED config - some or all of these can be omitted if not used */
-#define PICOPROBE_USB_CONNECTED_LED 2
-#define PICOPROBE_DAP_CONNECTED_LED 15
-#define PICOPROBE_DAP_RUNNING_LED 16
-#define PICOPROBE_UART_RX_LED 7
-#define PICOPROBE_UART_TX_LED 8
+#define PROBE_USB_CONNECTED_LED 2
+#define PROBE_DAP_CONNECTED_LED 15
+#define PROBE_DAP_RUNNING_LED 16
+#define PROBE_UART_RX_LED 7
+#define PROBE_UART_TX_LED 8
 
 #define PROBE_PRODUCT_STRING "Example Debug Probe"
 

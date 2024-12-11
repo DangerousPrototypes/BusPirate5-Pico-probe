@@ -42,4 +42,10 @@ static inline void pirate_options_init(void){
     #include "pirate/psu.h"
     psu_init();
     //if(psu_enable(3.3, 0, true)) while(true);
+    #include "pirate/pirate.h"
+    #include "pirate/bio.h"
+    #include "board_buspirate5_config.h"
+    //configure buffer directions
+    bio_set_buffer_dir(PROBE_UART_TX, true);
+    bio_set_buffer_dir(PROBE_UART_RX, false);   
 }

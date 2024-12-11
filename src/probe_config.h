@@ -23,13 +23,65 @@
  *
  */
 
-#ifndef CDC_UART_H
-#define CDC_UART_H
+#ifndef PROBE_CONFIG_H_
+#define PROBE_CONFIG_H_
 
-void cdc_thread(void *ptr);
-void cdc_uart_init(void);
-bool cdc_task(void);
+#include "FreeRTOS.h"
+#include "task.h"
 
-extern TaskHandle_t uart_taskhandle;
+#if false
+#define probe_info(format,args...) \
+do { \
+	vTaskSuspendAll(); \
+	printf(format, ## args); \
+	xTaskResumeAll(); \
+} while (0)
+#else
+#define probe_info(format,...) ((void)0)
+#endif
+
+
+#if false
+#define probe_debug(format,args...) \
+do { \
+	vTaskSuspendAll(); \
+	printf(format, ## args); \
+	xTaskResumeAll(); \
+} while (0)
+#else
+#define probe_debug(format,...) ((void)0)
+#endif
+
+#if false
+#define probe_dump(format,args...)\
+do { \
+	vTaskSuspendAll(); \
+	printf(format, ## args); \
+	xTaskResumeAll(); \
+} while (0)
+#else
+#define probe_dump(format,...) ((void)0)
+#endif
+
+// TODO tie this up with PICO_BOARD defines in the main SDK
+#if 0
+#ifdef DEBUG_ON_PICO 
+#include "board_pico_config.h"
+#else
+#include "board_debug_probe_config.h"
+#endif
+//#include "board_example_config.h"
+#endif
+#include "board_buspirate5_config.h"
+// Add the configuration to binary information
+void bi_decl_config();
+
+#define PROTO_DAP_V1 1
+#define PROTO_DAP_V2 2
+
+// Interface config
+#ifndef PROBE_DEBUG_PROTOCOL
+#define PROBE_DEBUG_PROTOCOL PROTO_DAP_V2
+#endif
 
 #endif

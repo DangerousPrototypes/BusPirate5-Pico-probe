@@ -31,11 +31,8 @@
 #include <hardware/gpio.h>
 
 #include "led.h"
-
-#include "picoprobe_config.h"
-#if defined(PROBE_IO_RAW) || defined(PROBE_IO_SWDI)
-#include "probe.pio.h"
-#endif
+#include "probe_config.h"
+//#include "probe.pio.h"
 
 #if defined(PROBE_IO_OEN)
 #include "probe_oen.pio.h"
@@ -69,7 +66,7 @@ static struct _probe probe;
 
 void probe_set_swclk_freq(uint freq_khz) {
         uint clk_sys_freq_khz = clock_get_hz(clk_sys) / 1000;
-        picoprobe_info("Set swclk freq %dKHz sysclk %dkHz\n", freq_khz, clk_sys_freq_khz);
+        probe_info("Set swclk freq %dKHz sysclk %dkHz\n", freq_khz, clk_sys_freq_khz);
         uint32_t divider = clk_sys_freq_khz / freq_khz / 4;
         if (divider == 0)
             divider = 1;
@@ -80,7 +77,7 @@ void probe_assert_reset(bool state)
 {
 #if defined(PROBE_PIN_RESET)
     /* Change the direction to out to drive pin to 0 or to in to emulate open drain */
-    gpio_set_dir(PROBE_PIN_RESET, state);
+    gpio_set_dir(PROBE_PIN_RESET, state == 0 ? GPIO_OUT : GPIO_IN);
 #endif
 }
 
@@ -113,7 +110,7 @@ void probe_write_bits(uint bit_count, uint32_t data_byte) {
     DEBUG_PINS_SET(probe_timing, DBG_PIN_WRITE);
     pio_sm_put_blocking(pio0, PROBE_SM, fmt_probe_command(bit_count, true, CMD_WRITE));
     pio_sm_put_blocking(pio0, PROBE_SM, data_byte);
-    picoprobe_dump("Write %d bits 0x%x\n", bit_count, data_byte);
+    probe_dump("Write %d bits 0x%x\n", bit_count, data_byte);
     // Return immediately so we can cue up the next command whilst this one runs
     DEBUG_PINS_CLR(probe_timing, DBG_PIN_WRITE);
 }
@@ -132,7 +129,7 @@ uint32_t probe_read_bits(uint bit_count) {
         data_shifted = data >> (32 - bit_count);
     }
 
-    picoprobe_dump("Read %d bits 0x%x (shifted 0x%x)\n", bit_count, data, data_shifted);
+    probe_dump("Read %d bits 0x%x (shifted 0x%x)\n", bit_count, data, data_shifted);
     DEBUG_PINS_CLR(probe_timing, DBG_PIN_READ);
     return data_shifted;
 }
@@ -178,6 +175,9 @@ void probe_deinit(void)
     probe_read_mode();
     pio_sm_set_enabled(pio0, PROBE_SM, 0);
     pio_remove_program(pio0, &probe_program, probe.offset);
+
+    probe_assert_reset(1);	// de-assert nRESET
+
     probe.initted = 0;
   }
 }
