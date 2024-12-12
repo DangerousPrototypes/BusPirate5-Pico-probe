@@ -25,6 +25,7 @@ add_executable(debugprobe
         src/pirate/shift.c
         src/pirate/lcd.c
         src/pirate/psu.c
+        src/pirate/button.c
         src/pirate/display/display.c
 )
 

@@ -161,10 +161,17 @@ void ui_lcd_update(const char **hw_pin_label_ordered, const char **func_pin_labe
 
     lcd_write_background(layout.image->bitmap);
 
-// names
+    // firmware title
+    // sits in the 0 position of the pin label array
     uint16_t left_margin = lcd_get_col(&layout, layout.font_default, 1); // put us in the first column
-    // IO pin name loop
     uint16_t top_margin = layout.vout_top_pad;
+    lcd_write_labels(left_margin,
+                     top_margin,
+                     layout.font_default,
+                     colors_pallet[layout.io_label_color],
+                     func_pin_label_ordered[0],  layout.io_col_width_chars);
+    // IO pin name loop
+    top_margin = layout.io_col_top_pad-layout.io_row_height;
     for (int i = 0; i < HW_PINS; i++) {
         lcd_write_labels(left_margin,
                             top_margin,
@@ -180,8 +187,10 @@ void ui_lcd_update(const char **hw_pin_label_ordered, const char **func_pin_labe
 // labels
     left_margin = lcd_get_col(&layout, layout.font_default, 2); // put us in the second column
     // IO pin label loop
-    top_margin = layout.vout_top_pad;
-    for (int i = 0; i < HW_PINS; i++) {
+    //top_margin = layout.vout_top_pad;
+    // pin labels for 1...9, skip the first array element, it is the firmware title
+    top_margin = layout.io_col_top_pad;
+    for (int i = 1; i < HW_PINS; i++) {
 
         //todo: PASS PIN LABELS
         lcd_write_labels(left_margin,

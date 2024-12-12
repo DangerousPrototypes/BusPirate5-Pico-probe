@@ -10,6 +10,8 @@
 #include "lcd.h"
 #include "display/display.h"
 #include "pirate_config.h"
+#include "button.h"
+#include "pirate/psu.h"
 
 void pirate_init(void){
 
@@ -54,11 +56,13 @@ void pirate_init(void){
     shift_output_enable(true); 
 #endif    
 
+    psu_init();
+
+    button_init();
+
     lcd_reset();
     lcd_configure();
     lcd_backlight_enable(true);
-
-    ui_lcd_update(hw_pin_label_ordered, func_pin_label_ordered, direction_pin_label_ordered);
 
     pirate_options_init();
 }
